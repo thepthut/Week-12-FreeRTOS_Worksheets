@@ -309,11 +309,21 @@ idf.py monitor | tee output.log
 
 ## คำถามทบทวน
 
-1. ความแตกต่างระหว่าง `printf()` และ `ESP_LOGI()` คืออะไร?
-2. Log level ไหนที่จะแสดงใน default configuration?
-3. การใช้ `ESP_ERROR_CHECK()` มีประโยชน์อย่างไร?
-4. คำสั่งใดในการออกจาก Monitor mode?
-5. การตั้งค่า Log level สำหรับ tag เฉพาะทำอย่างไร?
+1. ความแตกต่างระหว่าง printf() และ ESP_LOGI() คืออะไร? ESP_LOGI() (อ้างอิงจาก Step 2) เป็นฟังก์ชัน logging ของ ESP-IDF ที่พิมพ์ข้อความออกมาพร้อมกับ Log Level (เช่น I สำหรับ Info), TAG (ชื่อโมดูล) และ Timestamp นอกจากนี้ยังสามารถ "กรอง" (filter) การแสดงผลตามระดับความสำคัญได้ (ตาม Step 3)
+
+ส่วน printf() (อ้างอิงจาก Exercise 1) เป็นฟังก์ชัน C มาตรฐานที่จะพิมพ์เฉพาะข้อความดิบๆ ออกมาที่ console และไม่สามารถกรองด้วยระบบ Log Level ของ ESP-IDF ได้
+
+2. Log level ไหนที่จะแสดงใน default configuration? (อ้างอิงจาก Step 2, demonstrate_logging_levels()) Log level เริ่มต้น (default) คือ Info (ESP_LOGI) ซึ่งหมายความว่า Info, Warning (ESP_LOGW) และ Error (ESP_LOGE) จะถูกแสดงผล แต่ Debug (ESP_LOGD) และ Verbose (ESP_LOGV) จะไม่ถูกแสดง
+
+3. การใช้ ESP_ERROR_CHECK() มีประโยชน์อย่างไร? (อ้างอิงจาก Step 2, demonstrate_conditional_logging()) ESP_ERROR_CHECK() ใช้สำหรับตรวจสอบค่า esp_err_t (Error Code) ที่ฟังก์ชันต่างๆ คืนค่ากลับมา ประโยชน์: ถ้าค่าที่ตรวจสอบ ไม่ใช่ ESP_OK (หมายถึงเกิดข้อผิดพลาด) Macro นี้จะพิมพ์ข้อความ Error ที่ระบุชื่อไฟล์, หมายเลขบรรทัด และชื่อของ Error นั้นๆ ออกมา แล้ว สั่งให้โปรแกรมหยุดทำงาน (Abort) ทันที (ซึ่งอนุมานได้จากการมี ESP_ERROR_CHECK_WITHOUT_ABORT ใน Exercise 3) ซึ่งช่วยให้หาจุดที่เกิดบั๊กได้ง่ายและรวดเร็ว
+
+4. คำสั่งใดในการออกจาก Monitor mode? (อ้างอิงจาก Step 1)
+
+Linux/macOS: Ctrl+] (Control + วงเล็บเหลี่ยมขวา)
+
+Windows: Ctrl+T แล้วตามด้วย Ctrl+X
+
+5. การตั้งค่า Log level สำหรับ tag เฉพาะทำอย่างไร? (อ้างอิงจาก Step 3) สามารถตั้งค่าในโค้ดได้โดยใช้ฟังก์ชัน esp_log_level_set() ตัวอย่าง: esp_log_level_set("LOGGING_DEMO", ESP_LOG_DEBUG); (คำสั่งนี้จะตั้งค่าให้ TAG "LOGGING_DEMO" แสดงผลในระดับ Debug ในขณะที่ TAG อื่นๆ ยังคงใช้ค่า default)
 
 ## บทสรุป
 
