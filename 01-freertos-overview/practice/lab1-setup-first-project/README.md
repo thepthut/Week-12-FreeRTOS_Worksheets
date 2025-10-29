@@ -230,10 +230,20 @@ idf.py build
 ## คำถามทบทวหน
 
 1. ไฟล์ใดบ้างที่จำเป็นสำหรับโปรเจกต์ ESP-IDF ขั้นต่ำ?
+CMakeLists.txt (ที่ root)
+โฟลเดอร์ main/
+main/CMakeLists.txt
+main/hello_esp32.c (หรือไฟล์ source code หลัก)
+
 2. ความแตกต่างระหว่าง `hello_esp32.bin` และ `hello_esp32.elf` คืออะไร?
+.bin คือไฟล์ไบนารี (Main application binary) ที่ใช้สำหรับ flash ลงในหน่วยความจำของ ESP32
+.elf คือไฟล์ที่มีข้อมูลเพิ่มเติมสำหรับ Debug (ELF file with debug info)
 3. คำสั่ง `idf.py set-target` ทำอะไร?
+esp32-s2, esp32-c3) เพื่อให้ ESP-IDF รู้ว่าจะต้อง build โปรแกรมสำหรับชิปรุ่นใด
 4. โฟลเดอร์ `build/` มีไฟล์อะไรบ้าง?
+จะมีไฟล์ที่ถูกสร้างขึ้นจากการคอมไพล์ เช่น bootloader/, partition_table/, hello_esp32.bin (ไฟล์ไบนารี), hello_esp32.elf (ไฟล์ดีบัก) และ flash_args
 5. การใช้ `vTaskDelay()` แทน `delay()` มีความสำคัญอย่างไร?
+vTaskDelay() (จาก freertos/task.h) เป็นฟังก์ชันของ FreeRTOS ที่จะ "Block" (พัก) Task ปัจจุบัน และอนุญาตให้ OS สลับไปทำงาน (Task) อื่นที่พร้อมทำงานได้ ซึ่งเป็นการใช้ CPU อย่างมีประสิทธิภาพ ต่างจาก delay() ทั่วไปที่มักจะเป็น "busy-wait" (วนลูปเปล่าๆ) ซึ่งจะกิน CPU ตลอดเวลา
 
 ## บทสรุป
 
